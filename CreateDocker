@@ -1,0 +1,36 @@
+install and start docker
+sudo subscription-manager repos --enable=rhel-7-server-rpms
+sudo subscription-manager repos --enable=rhel-7-server-extras-rpms
+sudo subscription-manager repos --enable=rhel-7-server-optional-rpms
+sudo yum install docker device-mapper-libs device-mapper-event-libs
+sudo systemctl start docker.service
+sudo systemctl enable docker.service
+pull docker redhat standard image 
+sudo docker pull registry.access.redhat.com/rhel7/rhel
+start docker container using the redhat image and directly access bash in docker
+sudo docker run -it -v /host_dir/app_dir/:/container_dir/mapped_dir:Z --name mydocker registry.access.redhat.com/rhel7/rhel
+above command with tag -v can mount any local directory in host machine to a directory in the docker container, so that we can read/write persistent data out of docker container
+after execute above command, we will run into bash of standard Redhat OS in the docker container 
+install all application code and dependent third party software within the docker bash
+yum will be available to install software we need
+type exit to exit from docker container after installation is finished/verified
+commit change to create a new docker image
+sudo docker commit mydocker mydockerimage
+mydocker is the name we specify when we start docker container
+mydockerimage is the name for the image we want to save
+export docker image and upload to oneartifectory web site
+sudo docker save  mydockerimage  > mydockerimage.tar
+or sudo docker save  mydockerimage | gzip > mydockerimage.tar.gz  
+mydockerimage.tar or mydockerimage.tar.gz is the image file that can be uploaded 
+
+To work later in a docker container again:
+sudo docker start mydocker
+sudo docker attach mydocker
+Then you will be in bash of the docker container again.
+Other useful docker commands
+sudo docker ps -a (list all docker containers, including both running and exited containers)
+sudo docker images -a (list all loaded docker images)
+sudo docker load -i location_of_local_dockerimage_file  (load docker image from local file)
+Reference page of docker run command (to find all available options to start the docker container):
+https://docs.docker.com/engine/reference/commandline/run/
+ 
