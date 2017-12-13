@@ -1,0 +1,4 @@
+or file in *.json; do c=${file#*}; c=${c%.json}; mongoimport --db yourdbname --collection "${c}" --file "${file}"; done
+
+
+find . -name \*.json -type f -exec sed -i "s/dc1/aaptnx/g" {} \;
