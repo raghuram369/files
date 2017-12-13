@@ -1,4 +1,17 @@
-or file in *.json; do c=${file#*}; c=${c%.json}; mongoimport --db yourdbname --collection "${c}" --file "${file}"; done
+
+
+for file in *.json; do c=${file#*}; c=${c%.json}; mongoimport --db NC --collection "${c}" --file "${file}"; done
 
 
 find . -name \*.json -type f -exec sed -i "s/dc1/aaptnx/g" {} \;
+
+
+sudo npm install redis-dump -g
+redis-dump --json > mydb.json
+
+
+
+find . -name \*.json -type f -exec sed -i "s/dc1/aaptnx/g" {} \;
+
+
+cat mydb.json | redis-dump --convert | redis-cli
